@@ -5,50 +5,48 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 
-// Modern Digital Agency Color Scheme
+// Enver-inspired Dark Theme
 private val DarkColorScheme = darkColorScheme(
-    primary = Color(0xFF6366F1), // Indigo
-    secondary = Color(0xFF8B5CF6), // Purple
-    tertiary = Color(0xFFEC4899), // Pink
-    background = Color(0xFF0F172A), // Dark slate
-    surface = Color(0xFF1E293B), // Slate
-    surfaceVariant = Color(0xFF334155), // Light slate
+    primary = Color(0xFF6C5CE7), // Purple
+    secondary = Color(0xFFA29BFE), // Light Purple
+    tertiary = Color(0xFFFD79A8), // Pink
+    background = Color(0xFF0A0E27), // Very dark blue
+    surface = Color(0xFF1A1F3A), // Dark blue
+    surfaceVariant = Color(0xFF2D3552), // Medium dark blue
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color(0xFFF1F5F9), // Slate 100
-    onSurface = Color(0xFFF1F5F9),
-    onSurfaceVariant = Color(0xFFCBD5E1), // Slate 300
-    outline = Color(0xFF475569), // Slate 600
-    outlineVariant = Color(0xFF334155), // Slate 700
+    onBackground = Color(0xFFFFFFFF), // White
+    onSurface = Color(0xFFE8EAF6), // Light purple-white
+    onSurfaceVariant = Color(0xFFB0BEC5), // Light blue-grey
+    outline = Color(0xFF546E7A), // Blue-grey
+    outlineVariant = Color(0xFF37474F), // Dark blue-grey
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Color(0xFF6366F1), // Indigo
-    secondary = Color(0xFF8B5CF6), // Purple
-    tertiary = Color(0xFFEC4899), // Pink
-    background = Color(0xFFF8FAFC), // Slate 50
-    surface = Color(0xFFFFFFFF), // White
-    surfaceVariant = Color(0xFFF1F5F9), // Slate 100
+    primary = Color(0xFF6C5CE7), // Purple
+    secondary = Color(0xFFA29BFE), // Light Purple
+    tertiary = Color(0xFFFD79A8), // Pink
+    background = Color(0xFF0A0E27), // Keep dark for consistency
+    surface = Color(0xFF1A1F3A), // Keep dark
+    surfaceVariant = Color(0xFF2D3552), // Keep dark
     onPrimary = Color.White,
     onSecondary = Color.White,
     onTertiary = Color.White,
-    onBackground = Color(0xFF0F172A), // Slate 900
-    onSurface = Color(0xFF1E293B), // Slate 800
-    onSurfaceVariant = Color(0xFF475569), // Slate 600
-    outline = Color(0xFFCBD5E1), // Slate 300
-    outlineVariant = Color(0xFFE2E8F0), // Slate 200
+    onBackground = Color(0xFFFFFFFF),
+    onSurface = Color(0xFFE8EAF6),
+    onSurfaceVariant = Color(0xFFB0BEC5),
+    outline = Color(0xFF546E7A),
+    outlineVariant = Color(0xFF37474F),
 )
 
 @Composable
 fun PortfolioTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    darkTheme: Boolean = true, // Always use dark theme for Enver style
     content: @Composable () -> Unit
 ) {
-    val colorScheme = if (darkTheme) DarkColorScheme else LightColorScheme
-
     MaterialTheme(
-        colorScheme = colorScheme,
+        colorScheme = DarkColorScheme,
         typography = Typography,
         content = content
     )

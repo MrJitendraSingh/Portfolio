@@ -16,30 +16,30 @@ fun AboutSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
+            .padding(horizontal = 48.dp, vertical = 32.dp)
     ) {
         Text(
-            text = "About",
-            style = MaterialTheme.typography.headlineMedium,
+            text = "About Me",
+            style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 16.dp)
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(bottom = 24.dp)
         )
         
         Card(
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(20.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
-            elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+            elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
         ) {
             Text(
                 text = summary,
                 style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurface,
-                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight,
-                modifier = Modifier.padding(24.dp)
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.9f),
+                lineHeight = MaterialTheme.typography.bodyLarge.lineHeight * 1.5,
+                modifier = Modifier.padding(32.dp)
             )
         }
     }
