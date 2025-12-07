@@ -61,6 +61,40 @@ in your IDE's toolbar or run it directly from the terminal:
     .\gradlew.bat :composeApp:jsBrowserDevelopmentRun
     ```
 
+### Build Production Web Application
+
+To build the production version for deployment:
+- on macOS/Linux
+  ```shell
+  ./gradlew :composeApp:wasmJsBrowserProductionWebpack
+  ```
+- on Windows
+  ```shell
+  .\gradlew.bat :composeApp:wasmJsBrowserProductionWebpack
+  ```
+
+The production build will be generated in `composeApp/build/dist/wasmJs/productionExecutable/`
+
+### Deploy to GitHub Pages
+
+This project is configured for automatic deployment to GitHub Pages:
+
+1. **Enable GitHub Pages in your repository:**
+   - Go to your repository Settings → Pages
+   - Under "Source", select "GitHub Actions"
+
+2. **Automatic Deployment:**
+   - The workflow automatically builds and deploys on every push to the `main` branch
+   - You can also manually trigger deployment from the Actions tab
+
+3. **Your portfolio will be available at:**
+   - `https://[your-username].github.io/[repository-name]/`
+
+The deployment workflow:
+- Builds the production Wasm version of the web app
+- Deploys it to GitHub Pages automatically
+- Updates on every push to the main branch
+
 ### Build and Run iOS Application
 
 To build and run the development version of the iOS app, use the run configuration from the run widget
