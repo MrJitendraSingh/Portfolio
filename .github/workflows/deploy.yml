@@ -36,27 +36,58 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
+      - name: List available Gradle tasks
+        run: ./gradlew tasks --all | grep -i "wasm\|browser" | head -20 || echo "Could not list tasks"
+
       - name: Build Web Application (Wasm)
-        run: ./gradlew :composeApp:wasmJsBrowserProductionWebpack
+        run: |
+          # Try different task names
+          if ./gradlew :composeApp:wasmJsBrowserProductionWebpack --dry-run 2>&1 | grep -q "wasmJsBrowserProductionWebpack"; then
+            ./gradlew :composeApp:wasmJsBrowserProductionWebpack
+          elif ./gradlew :composeApp:wasmJsBrowserProductionDistribution --dry-run 2>&1 | grep -q "wasmJsBrowserProductionDistribution"; then
+            ./gradlew :composeApp:wasmJsBrowserProductionDistribution
+          elif ./gradlew :composeApp:wasmJsBrowserProductionExecutable --dry-run 2>&1 | grep -q "wasmJsBrowserProductionExecutable"; then
+            ./gradlew :composeApp:wasmJsBrowserProductionExecutable
+          else
+            echo "Trying default wasmJs build..."
+            ./gradlew :composeApp:wasmJsBrowserProductionWebpack || ./gradlew :composeApp:wasmJsBrowserProductionDistribution || ./gradlew :composeApp:wasmJsBrowserProductionExecutable
+          fi
 
       - name: Find and prepare build output
         id: find_output
         run: |
+          echo "Searching for build output..."
+          echo "Current directory structure:"
+          find composeApp/build -type d -maxdepth 4 2>/dev/null | head -20 || true
+          
           # Try to find the build output directory
-          if [ -d "composeApp/build/dist/wasmJs/productionExecutable" ]; then
-            OUTPUT_DIR="composeApp/build/dist/wasmJs/productionExecutable"
-          elif [ -d "composeApp/build/dist/wasmJs/production" ]; then
-            OUTPUT_DIR="composeApp/build/dist/wasmJs/production"
-          elif [ -d "composeApp/build/dist/wasmJs" ]; then
-            OUTPUT_DIR="composeApp/build/dist/wasmJs"
-          else
-            echo "Build output not found. Listing build directory:"
-            find composeApp/build -type d -name "*wasm*" | head -10
-            find composeApp/build -name "*.html" | head -5
+          OUTPUT_DIR=""
+          for dir in \
+            "composeApp/build/dist/wasmJs/productionExecutable" \
+            "composeApp/build/dist/wasmJs/production" \
+            "composeApp/build/dist/wasmJs" \
+            "composeApp/build/dist" \
+            "composeApp/build/wasmJs/productionExecutable" \
+            "composeApp/build/wasmJs/production"
+          do
+            if [ -d "$dir" ] && [ -f "$dir/index.html" ] 2>/dev/null; then
+              OUTPUT_DIR="$dir"
+              echo "Found build output at: $OUTPUT_DIR"
+              break
+            fi
+          done
+          
+          if [ -z "$OUTPUT_DIR" ]; then
+            echo "Build output not found. Searching for HTML files:"
+            find composeApp/build -name "*.html" -type f 2>/dev/null | head -5
+            find composeApp/build -name "*.wasm" -type f 2>/dev/null | head -5
+            echo "Trying to find any dist directory:"
+            find composeApp/build -type d -name "dist" 2>/dev/null
             exit 1
           fi
+          
           echo "OUTPUT_DIR=$OUTPUT_DIR" >> $GITHUB_OUTPUT
-          echo "Found build output at: $OUTPUT_DIR"
+          echo "Contents of output directory:"
           ls -la "$OUTPUT_DIR"
 
       - name: Setup Pages
