@@ -9,6 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jitendra.portfolio.data.WorkExperience
+import com.jitendra.portfolio.ui.constants.PaddingConstants
 
 @Composable
 fun ExperienceSection(
@@ -18,14 +19,14 @@ fun ExperienceSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-    ) {
+            .padding(horizontal = PaddingConstants.horizontalPadding(), vertical = 32.dp)
+        ) {
         Text(
             text = "Work Experience",
-            style = MaterialTheme.typography.headlineMedium,
+            style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 16.dp)
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(bottom = 24.dp)
         )
         
         experiences.forEachIndexed { index, experience ->
@@ -41,11 +42,11 @@ fun ExperienceSection(
 private fun ExperienceCard(experience: WorkExperience) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier

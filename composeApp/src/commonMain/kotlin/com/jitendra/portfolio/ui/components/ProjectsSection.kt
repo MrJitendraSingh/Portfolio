@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jitendra.portfolio.data.Project
+import com.jitendra.portfolio.ui.constants.PaddingConstants
 
 @Composable
 fun ProjectsSection(
@@ -17,14 +18,14 @@ fun ProjectsSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 16.dp)
-    ) {
+            .padding(horizontal = PaddingConstants.horizontalPadding(), vertical = 32.dp)
+        ) {
         Text(
-            text = "Projects",
-            style = MaterialTheme.typography.headlineMedium,
+            text = "My Projects",
+            style = MaterialTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
-            color = MaterialTheme.colorScheme.primary,
-            modifier = Modifier.padding(bottom = 16.dp)
+            color = MaterialTheme.colorScheme.onBackground,
+            modifier = Modifier.padding(bottom = 24.dp)
         )
         
         Column(
@@ -42,11 +43,11 @@ fun ProjectsSection(
 private fun ProjectCard(project: Project) {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(16.dp),
+        shape = RoundedCornerShape(20.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
         ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 0.dp)
     ) {
         Column(
             modifier = Modifier
