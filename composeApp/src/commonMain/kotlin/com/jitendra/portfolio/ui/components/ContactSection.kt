@@ -10,6 +10,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.jitendra.portfolio.data.PersonalInfo
+import com.jitendra.portfolio.ui.constants.PaddingConstants
 
 @Composable
 fun ContactSection(
@@ -19,7 +20,7 @@ fun ContactSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 24.dp)
+            .padding(horizontal = PaddingConstants.horizontalPadding(), vertical = 24.dp)
             .widthIn(max = 1200.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

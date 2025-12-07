@@ -13,9 +13,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.jitendra.portfolio.ui.constants.NavigationTabs
 
 @Composable
 fun NavigationHeader(
+    selectedTab: String = NavigationTabs.HOME,
+    onHomeClick: () -> Unit = {},
+    onSkillsClick: () -> Unit = {},
+    onProjectsClick: () -> Unit = {},
     onConnectClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -30,7 +35,7 @@ fun NavigationHeader(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 16.dp),
+                    .padding(horizontal = com.jitendra.portfolio.ui.constants.PaddingConstants.horizontalPadding(), vertical = 16.dp),
                 horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -62,9 +67,21 @@ fun NavigationHeader(
                 
                 // Responsive Navigation: Desktop shows links, Mobile shows menu icon
                 if (isMobile) {
-                    MobileMenu(onConnectClick = onConnectClick)
+                    MobileMenu(
+                        selectedTab = selectedTab,
+                        onHomeClick = onHomeClick,
+                        onSkillsClick = onSkillsClick,
+                        onProjectsClick = onProjectsClick,
+                        onConnectClick = onConnectClick
+                    )
                 } else {
-                    DesktopNavigation(onConnectClick = onConnectClick)
+                    DesktopNavigation(
+                        selectedTab = selectedTab,
+                        onHomeClick = onHomeClick,
+                        onSkillsClick = onSkillsClick,
+                        onProjectsClick = onProjectsClick,
+                        onConnectClick = onConnectClick
+                    )
                 }
             }
         }
@@ -72,38 +89,48 @@ fun NavigationHeader(
 }
 
 @Composable
-private fun DesktopNavigation(onConnectClick: () -> Unit) {
+private fun DesktopNavigation(
+    selectedTab: String,
+    onHomeClick: () -> Unit,
+    onSkillsClick: () -> Unit,
+    onProjectsClick: () -> Unit,
+    onConnectClick: () -> Unit
+) {
     Row(
         horizontalArrangement = Arrangement.spacedBy(24.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
-        NavLink("Home", isSelected = true)
-        NavLink("About")
-        NavLink("Projects")
-        
-        // Connect Button
-        Surface(
-            onClick = onConnectClick,
-            shape = RoundedCornerShape(8.dp),
-            color = Color.Transparent,
-            border = BorderStroke(
-                1.dp,
-                MaterialTheme.colorScheme.primary
-            )
-        ) {
-            Text(
-                text = "Connect",
-                style = MaterialTheme.typography.bodyMedium,
-                fontWeight = FontWeight.SemiBold,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.padding(horizontal = 20.dp, vertical = 10.dp)
-            )
-        }
+        NavLink(
+            text = NavigationTabs.HOME,
+            isSelected = selectedTab == NavigationTabs.HOME,
+            onClick = onHomeClick
+        )
+        NavLink(
+            text = NavigationTabs.CONNECT,
+            isSelected = selectedTab == NavigationTabs.CONNECT,
+            onClick = onConnectClick
+        )
+        NavLink(
+            text = NavigationTabs.SKILLS,
+            isSelected = selectedTab == NavigationTabs.SKILLS,
+            onClick = onSkillsClick
+        )
+        NavLink(
+            text = NavigationTabs.PROJECTS,
+            isSelected = selectedTab == NavigationTabs.PROJECTS,
+            onClick = onProjectsClick
+        )
     }
 }
 
 @Composable
-private fun MobileMenu(onConnectClick: () -> Unit) {
+private fun MobileMenu(
+    selectedTab: String,
+    onHomeClick: () -> Unit,
+    onSkillsClick: () -> Unit,
+    onProjectsClick: () -> Unit,
+    onConnectClick: () -> Unit
+) {
     var expanded by remember { mutableStateOf(false) }
     
     Box {
@@ -139,54 +166,76 @@ private fun MobileMenu(onConnectClick: () -> Unit) {
             }
         }
         
-        // Dropdown Menu
+        // Dropdown Menu with gradient background
         DropdownMenu(
             expanded = expanded,
             onDismissRequest = { expanded = false },
-            modifier = Modifier.widthIn(min = 200.dp)
+            modifier = Modifier
+                .widthIn(min = 200.dp)
+                .background(
+                    brush = androidx.compose.ui.graphics.Brush.verticalGradient(
+                        colors = listOf(
+                            MaterialTheme.colorScheme.background,
+                            Color(0xFF0D1220), // Darker blue
+                            Color(0xFF050810) // Almost black
+                        )
+                    )
+                )
         ) {
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "Home",
+                        text = NavigationTabs.HOME,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary
+                        fontWeight = if (selectedTab == NavigationTabs.HOME) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (selectedTab == NavigationTabs.HOME) Color(0xFF2196F3) else MaterialTheme.colorScheme.onBackground
                     )
                 },
-                onClick = { expanded = false }
+                onClick = {
+                    expanded = false
+                    onHomeClick()
+                }
             )
             DropdownMenuItem(
                 text = {
                     Text(
-                        text = "About",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                onClick = { expanded = false }
-            )
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = "Projects",
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                },
-                onClick = { expanded = false }
-            )
-            HorizontalDivider(modifier = Modifier.padding(vertical = 4.dp))
-            DropdownMenuItem(
-                text = {
-                    Text(
-                        text = "Connect",
+                        text = NavigationTabs.CONNECT,
                         style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.primary
+                        fontWeight = if (selectedTab == NavigationTabs.CONNECT) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (selectedTab == NavigationTabs.CONNECT) Color(0xFF2196F3) else MaterialTheme.colorScheme.onBackground
                     )
                 },
                 onClick = {
                     expanded = false
                     onConnectClick()
+                }
+            )
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = NavigationTabs.SKILLS,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (selectedTab == NavigationTabs.SKILLS) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (selectedTab == NavigationTabs.SKILLS) Color(0xFF2196F3) else MaterialTheme.colorScheme.onBackground
+                    )
+                },
+                onClick = {
+                    expanded = false
+                    onSkillsClick()
+                }
+            )
+            DropdownMenuItem(
+                text = {
+                    Text(
+                        text = NavigationTabs.PROJECTS,
+                        style = MaterialTheme.typography.bodyMedium,
+                        fontWeight = if (selectedTab == NavigationTabs.PROJECTS) FontWeight.SemiBold else FontWeight.Normal,
+                        color = if (selectedTab == NavigationTabs.PROJECTS) Color(0xFF2196F3) else MaterialTheme.colorScheme.onBackground
+                    )
+                },
+                onClick = {
+                    expanded = false
+                    onProjectsClick()
                 }
             )
         }
@@ -196,17 +245,20 @@ private fun MobileMenu(onConnectClick: () -> Unit) {
 @Composable
 private fun NavLink(
     text: String,
-    isSelected: Boolean = false
+    isSelected: Boolean = false,
+    isPrimary: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
     Text(
         text = text,
         style = MaterialTheme.typography.bodyMedium,
-        fontWeight = if (isSelected) FontWeight.SemiBold else FontWeight.Normal,
-        color = if (isSelected) {
-            MaterialTheme.colorScheme.primary
-        } else {
-            MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
-        }
+        fontWeight = if (isSelected || isPrimary) FontWeight.SemiBold else FontWeight.Normal,
+        color = when {
+            isSelected -> Color(0xFF2196F3) // Blue color for selected tab
+            isPrimary -> Color(0xFF2196F3) // Blue color
+            else -> MaterialTheme.colorScheme.onBackground.copy(alpha = 0.7f)
+        },
+        modifier = Modifier.clickable(onClick = onClick)
     )
 }
 

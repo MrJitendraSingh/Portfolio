@@ -18,20 +18,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jitendra.portfolio.data.PersonalInfo
+import com.jitendra.portfolio.ui.constants.PaddingConstants
 
 @Composable
 fun HeroSection(
     personalInfo: PersonalInfo,
     onConnectClick: () -> Unit = {},
+    onExperienceClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 24.dp, vertical = 48.dp),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
+            .padding(horizontal = PaddingConstants.horizontalPadding(), vertical = 32.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
         // Left side - Text content
         Column(
             modifier = Modifier
@@ -40,14 +42,14 @@ fun HeroSection(
             verticalArrangement = Arrangement.spacedBy(24.dp)
         ) {
             Text(
-                text = "Build Your\nAwesome\nPlatform",
+                text = "Android\nApp\nDeveloper",
                 style = MaterialTheme.typography.displayLarge.copy(
-                    fontSize = 56.sp,
-                    lineHeight = 64.sp
+                    fontSize = 36.sp,
+                    lineHeight = 40.sp,
                 ),
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onBackground,
-                lineHeight = 64.sp
+                lineHeight = 40.sp
             )
             
             Text(
@@ -65,7 +67,7 @@ fun HeroSection(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ) {
                 Surface(
-                    onClick = { /* Scroll to projects */ },
+                    onClick = onExperienceClick,
                     shape = RoundedCornerShape(12.dp),
                     color = MaterialTheme.colorScheme.primary,
                 ) {
@@ -75,7 +77,7 @@ fun HeroSection(
                         horizontalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         Text(
-                            text = "View My Work",
+                            text = "Experience",
                             style = MaterialTheme.typography.titleMedium,
                             fontWeight = FontWeight.SemiBold,
                             color = Color.White
@@ -87,38 +89,14 @@ fun HeroSection(
                         )
                     }
                 }
-                
-                Surface(
-                    onClick = onConnectClick,
-                    shape = RoundedCornerShape(12.dp),
-                    color = Color.Transparent,
-                    border = BorderStroke(2.dp, MaterialTheme.colorScheme.primary)
-                ) {
-                    Row(
-                        modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        Text(
-                            text = "Connect",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.SemiBold,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                        Text(
-                            text = "→",
-                            style = MaterialTheme.typography.titleLarge,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
+
             }
         }
         
         // Right side - Image with decorative shapes
         Box(
             modifier = Modifier
-                .weight(1f)
+                .weight(0.8f)
                 .height(500.dp),
             contentAlignment = Alignment.Center
         ) {

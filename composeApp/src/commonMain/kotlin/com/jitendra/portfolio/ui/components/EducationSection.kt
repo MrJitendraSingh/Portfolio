@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.jitendra.portfolio.data.Education
+import com.jitendra.portfolio.ui.constants.PaddingConstants
 
 @Composable
 fun EducationSection(
@@ -17,8 +18,8 @@ fun EducationSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 48.dp, vertical = 32.dp)
-    ) {
+            .padding(horizontal = PaddingConstants.horizontalPadding(), vertical = 32.dp)
+        ) {
         Text(
             text = "Education",
             style = MaterialTheme.typography.headlineLarge,

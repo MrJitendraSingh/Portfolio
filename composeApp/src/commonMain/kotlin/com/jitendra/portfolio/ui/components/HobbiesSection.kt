@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.jitendra.portfolio.ui.constants.PaddingConstants
 
 @Composable
 fun HobbiesSection(
@@ -18,8 +19,8 @@ fun HobbiesSection(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(horizontal = 48.dp, vertical = 32.dp)
-    ) {
+            .padding(horizontal = PaddingConstants.horizontalPadding(), vertical = 32.dp)
+        ) {
         Text(
             text = "Hobbies",
             style = MaterialTheme.typography.headlineLarge,
