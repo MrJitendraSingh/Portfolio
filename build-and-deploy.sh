@@ -13,16 +13,20 @@ OUTPUT_DIR=""
 
 # Try different possible output locations
 for dir in \
+  "composeApp/build/kotlin-webpack/wasmJs/productionExecutable" \
   "composeApp/build/dist/wasmJs/productionExecutable" \
   "composeApp/build/dist/wasmJs/production" \
   "composeApp/build/dist/wasmJs" \
   "composeApp/build/wasmJs/productionExecutable" \
   "composeApp/build/wasmJs/production"
 do
-  if [ -d "$dir" ] && [ -f "$dir/index.html" ] 2>/dev/null; then
-    OUTPUT_DIR="$dir"
-    echo "✅ Found build output at: $OUTPUT_DIR"
-    break
+  if [ -d "$dir" ] 2>/dev/null; then
+    # Check if directory has wasm/js files (index.html might be in processedResources)
+    if ls "$dir"/*.wasm 1> /dev/null 2>&1 || ls "$dir"/*.js 1> /dev/null 2>&1 || [ -f "$dir/index.html" ] 2>/dev/null; then
+      OUTPUT_DIR="$dir"
+      echo "✅ Found build output at: $OUTPUT_DIR"
+      break
+    fi
   fi
 done
 
@@ -36,6 +40,25 @@ fi
 
 echo "📋 Contents of build output:"
 ls -la "$OUTPUT_DIR"
+
+# Copy index.html from processedResources if it doesn't exist in output dir
+if [ ! -f "$OUTPUT_DIR/index.html" ]; then
+  echo "index.html not found in output directory, looking for it..."
+  HTML_SOURCE=$(find composeApp/build/processedResources/wasmJs/main -name "index.html" 2>/dev/null | head -1)
+  if [ -n "$HTML_SOURCE" ]; then
+    echo "Copying index.html from $HTML_SOURCE"
+    cp "$HTML_SOURCE" "$OUTPUT_DIR/"
+  fi
+fi
+
+# Copy styles.css if it doesn't exist
+if [ ! -f "$OUTPUT_DIR/styles.css" ]; then
+  CSS_SOURCE=$(find composeApp/build/processedResources/wasmJs/main -name "styles.css" 2>/dev/null | head -1)
+  if [ -n "$CSS_SOURCE" ]; then
+    echo "Copying styles.css from $CSS_SOURCE"
+    cp "$CSS_SOURCE" "$OUTPUT_DIR/"
+  fi
+fi
 
 echo "📦 Copying files to docs directory..."
 rm -rf docs/*
