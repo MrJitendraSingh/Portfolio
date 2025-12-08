@@ -22,9 +22,16 @@ for dir in \
 do
   if [ -d "$dir" ] 2>/dev/null; then
     # Check if directory has wasm/js files (index.html might be in processedResources)
-    if ls "$dir"/*.wasm 1> /dev/null 2>&1 || ls "$dir"/*.js 1> /dev/null 2>&1 || [ -f "$dir/index.html" ] 2>/dev/null; then
+    WASM_COUNT=$(find "$dir" -maxdepth 1 -name "*.wasm" -type f 2>/dev/null | wc -l)
+    JS_COUNT=$(find "$dir" -maxdepth 1 -name "*.js" -type f 2>/dev/null | wc -l)
+    HAS_HTML=$([ -f "$dir/index.html" ] 2>/dev/null && echo "1" || echo "0")
+    
+    if [ "$WASM_COUNT" -gt 0 ] || [ "$JS_COUNT" -gt 0 ] || [ "$HAS_HTML" = "1" ]; then
       OUTPUT_DIR="$dir"
       echo "✅ Found build output at: $OUTPUT_DIR"
+      echo "  - WASM files: $WASM_COUNT"
+      echo "  - JS files: $JS_COUNT"
+      echo "  - Has index.html: $HAS_HTML"
       break
     fi
   fi
